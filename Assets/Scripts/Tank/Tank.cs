@@ -4,8 +4,8 @@ namespace Diep3D.Tank
 {
     public class Tank : MonoBehaviour
     {
-        [SerializeField] private float m_MovePower = 10f;
-        [SerializeField] private float m_JumpPower = 0.5f;
+        [SerializeField] private float m_MovePower;
+        [SerializeField] private float m_JumpPower;
 
         private Rigidbody m_Rigidbody;
         private const float m_GroundCheckDistance = 0.51f; // The length of the ray to check if the tank is grounded.
