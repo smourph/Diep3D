@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1278374322}
-  m_IndirectSpecularColor: {r: 0.45082325, g: 0.5007398, b: 0.57469505, a: 1}
+  m_IndirectSpecularColor: {r: 0.4508229, g: 0.50073963, b: 0.57469445, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1178,7 +1178,7 @@ GameObject:
   - component: {fileID: 1421142227}
   - component: {fileID: 1421142228}
   m_Layer: 0
-  m_Name: Head
+  m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
