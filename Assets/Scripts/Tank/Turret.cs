@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
 
 namespace Diep3D.Tank
 {
