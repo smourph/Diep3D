@@ -4,7 +4,7 @@ namespace Diep3D.Bullet
 {
     public class Bullet : MonoBehaviour
     {
-        [SerializeField] private GameObject particleEffect;
+        [SerializeField] private GameObject m_particleEffect;
 
         void OnCollisionEnter(Collision collision)
         {
@@ -25,7 +25,7 @@ namespace Diep3D.Bullet
 
         void SpawnParticleEffect(Vector3 position, Quaternion rotation)
         {
-            Instantiate(particleEffect, position, rotation);
+            Instantiate(m_particleEffect, position, rotation);
         }
     }
 }

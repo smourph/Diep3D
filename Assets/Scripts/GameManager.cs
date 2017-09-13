@@ -4,12 +4,12 @@ namespace Diep3D
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private bool lockCursor = true;
+        [SerializeField] private bool m_lockCursor = true;
 
         void Start()
         {
-            Cursor.visible = !lockCursor;
-            Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !m_lockCursor;
+            Cursor.lockState = m_lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
 #if UNITY_EDITOR
@@ -18,10 +18,10 @@ namespace Diep3D
             // pressing esc toggles between hide/show
             if (Input.GetKeyDown(KeyCode.C))
             {
-                lockCursor = !lockCursor;
+                m_lockCursor = !m_lockCursor;
             }
-            Cursor.visible = !lockCursor;
-            Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !m_lockCursor;
+            Cursor.lockState = m_lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 #endif
     }

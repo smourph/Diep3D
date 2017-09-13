@@ -4,8 +4,13 @@ namespace Diep3D.Tank
 {
     public class Tank : MonoBehaviour
     {
-        [SerializeField] private float m_MovePower;
-        [SerializeField] private float m_JumpPower;
+        public GameObject m_hull;
+        public GameObject m_turret;
+        public GameObject m_gun;
+        public GameObject m_bulletLauncher;
+
+        [SerializeField] private float m_movePower = 15f;
+        [SerializeField] private float m_jumpPower = 2f;
 
         private Rigidbody m_Rigidbody;
         private const float m_GroundCheckDistance = 0.51f; // The length of the ray to check if the tank is grounded.
@@ -28,18 +33,6 @@ namespace Diep3D.Tank
             m_Rigidbody.isKinematic = true;
         }
 
-        public void Move(Vector3 moveDirection, bool jump)
-        {
-            // Add force in the move direction.
-            m_Rigidbody.AddForce(moveDirection * m_MovePower);
-
-            // If not going down (approximation to -0.01...) and close to the ground and jump is pressed...
-            if (m_Rigidbody.velocity.y >= -0.01 && CheckGroundStatus() && jump)
-            {
-                m_Rigidbody.AddForce(Vector3.up * m_JumpPower, ForceMode.Impulse);
-            }
-        }
-
         bool CheckGroundStatus()
         {
             RaycastHit hitInfo;
@@ -55,6 +48,18 @@ namespace Diep3D.Tank
             else
             {
                 return false;
+            }
+        }
+
+        public void Move(Vector3 moveDirection, bool jump)
+        {
+            // Add force in the move direction.
+            m_Rigidbody.AddForce(moveDirection * m_movePower);
+
+            // If not going down (approximation to -0.01...) and close to the ground and jump is pressed...
+            if (m_Rigidbody.velocity.y >= -0.01 && CheckGroundStatus() && jump)
+            {
+                m_Rigidbody.AddForce(Vector3.up * m_jumpPower, ForceMode.Impulse);
             }
         }
     }
