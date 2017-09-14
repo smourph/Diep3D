@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09010c4e88f7e142900b311254cfbb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ammunition: {fileID: 54164521481822558, guid: c11f6500e77560c46a4681ab4a36e481,
+  m_ammunition: {fileID: 1486396058604208, guid: c11f6500e77560c46a4681ab4a36e481,
     type: 2}
   m_ejectSpeed: 100
   m_fireRate: 0.5

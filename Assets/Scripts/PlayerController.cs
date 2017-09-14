@@ -16,6 +16,9 @@ namespace Diep3D
         {
             // Reset any pre-existent movement
             m_engineDirection = Vector3.zero;
+
+            // Load player tank
+            m_tank = GetComponentInChildren<Tank.Tank>();
         }
 
         public override void OnStartLocalPlayer()
@@ -25,8 +28,6 @@ namespace Diep3D
             // Apply "Player" tag
             gameObject.tag = "LocalPlayer";
 
-            // Load player tank
-            m_tank = GetComponentInChildren<Tank.Tank>();
             m_tank.tag = "Player";
 
             if (Camera.main != null)
@@ -100,8 +101,34 @@ namespace Diep3D
                 // Shoot
                 if (m_fire)
                 {
-                    m_tank.m_bulletLauncher.GetComponent<Tank.BulletLauncher>().Fire();
+                    CmdFire();
                 }
+            }
+        }
+
+        // This [Command] code is called on the Client but it is run on the Server!
+        [Command]
+        public void CmdFire()
+        {
+            Tank.BulletLauncher launcher = m_tank.m_bulletLauncher.GetComponent<Tank.BulletLauncher>();
+
+            if (Time.time > launcher.NextFire)
+            {
+                launcher.NextFire = Time.time + launcher.m_fireRate;
+
+                GameObject bullet = (GameObject)Instantiate(launcher.m_ammunition,
+                                                            m_tank.m_bulletLauncher.transform.position,
+                                                            m_tank.m_bulletLauncher.transform.rotation);
+
+                if (isLocalPlayer)
+                {
+                    bullet.GetComponent<MeshRenderer>().material = Resources.Load("PlayerBullet", typeof(Material)) as Material;
+                }
+
+                // Spawn the bullet on the Clients
+                NetworkServer.Spawn(bullet);
+
+                bullet.GetComponent<Rigidbody>().AddForce(transform.TransformDirection(m_tank.m_bulletLauncher.transform.forward * launcher.m_ejectSpeed));
             }
         }
     }
