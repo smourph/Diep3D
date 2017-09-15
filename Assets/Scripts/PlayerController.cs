@@ -1,31 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using UnityStandardAssets.CrossPlatformInput;
 
 namespace Diep3D
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         private Tank.Tank m_tank;
         private Camera m_followingCamera;
         private Vector3 m_engineDirection;
-        private Vector3 m_gunDirection;
         private bool m_jump;
         private bool m_fire;
-
-        private void Awake()
-        {
-            m_tank = GetComponentInChildren<Tank.Tank>();
-
-            // Get the transform of the main camera
-            if (Camera.main != null)
-            {
-                m_followingCamera = Camera.main;
-            }
-            else
-            {
-                Debug.LogWarning("Warning: no main camera found. Tank needs a Camera tagged \"MainCamera\", for camera-relative controls.");
-            }
-        }
 
         private void OnEnable()
         {
@@ -33,8 +18,41 @@ namespace Diep3D
             m_engineDirection = Vector3.zero;
         }
 
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
+
+            // Apply "Player" tag
+            gameObject.tag = "LocalPlayer";
+
+            // Load player tank
+            m_tank = GetComponentInChildren<Tank.Tank>();
+            m_tank.tag = "Player";
+
+            if (Camera.main != null)
+            {
+                // Get the transform of the main camera
+                m_followingCamera = Camera.main;
+            }
+            else
+            {
+                Debug.LogWarning("Warning: no main camera found. Tank needs a Camera tagged \"MainCamera\", for camera-relative controls.");
+            }
+
+            // Apply player material on tank meshes 
+            m_tank.m_hull.GetComponent<MeshRenderer>().material = Resources.Load("Player", typeof(Material)) as Material;
+            m_tank.m_turret.GetComponentInChildren<MeshRenderer>().material = Resources.Load("Player", typeof(Material)) as Material;
+            m_tank.m_gun.GetComponentInChildren<MeshRenderer>().material = Resources.Load("Player", typeof(Material)) as Material;
+        }
+
         private void Update()
         {
+            // Only for the local player
+            if (!isLocalPlayer)
+            {
+                return;
+            }
+
             // Get the axis
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             float v = CrossPlatformInputManager.GetAxis("Vertical");
@@ -61,19 +79,29 @@ namespace Diep3D
 
         private void FixedUpdate()
         {
-            // Move the engine
-            m_tank.Move(m_engineDirection, m_jump);
-
-            // Turn the turret
-            m_tank.m_turret.GetComponent<Tank.Turret>().Move(m_followingCamera.transform.forward);
-
-            // Turn the barrel
-            m_tank.m_gun.GetComponent<Tank.Gun>().Move(m_followingCamera.transform.eulerAngles);
-
-            // Shoot
-            if (m_fire)
+            // Only for the local player
+            if (!isLocalPlayer)
             {
-                m_tank.m_bulletLauncher.GetComponent<Tank.BulletLauncher>().Fire();
+                return;
+            }
+
+            // If tank is defined
+            if (m_tank)
+            {
+                // Move the engine
+                m_tank.Move(m_engineDirection, m_jump);
+
+                // Turn the turret
+                m_tank.m_turret.GetComponent<Tank.Turret>().Move(m_followingCamera.transform.forward);
+
+                // Turn the barrel
+                m_tank.m_gun.GetComponent<Tank.Gun>().Move(m_followingCamera.transform.eulerAngles);
+
+                // Shoot
+                if (m_fire)
+                {
+                    m_tank.m_bulletLauncher.GetComponent<Tank.BulletLauncher>().Fire();
+                }
             }
         }
     }
