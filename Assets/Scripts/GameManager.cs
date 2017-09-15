@@ -1,22 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Diep3D
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private bool m_lockCursor = true;
 
-        // Use this for initialization
         void Start()
         {
-
+            Cursor.visible = !m_lockCursor;
+            Cursor.lockState = m_lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
-        // Update is called once per frame
+#if UNITY_EDITOR
         void Update()
         {
-
+            // pressing esc toggles between hide/show
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                m_lockCursor = !m_lockCursor;
+            }
+            Cursor.visible = !m_lockCursor;
+            Cursor.lockState = m_lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
         }
+#endif
     }
 }
