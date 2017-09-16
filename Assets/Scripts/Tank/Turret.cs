@@ -4,9 +4,29 @@ namespace Diep3D.Tank
 {
     public class Turret : MonoBehaviour
     {
-        public void Move(Vector3 forwardDirection)
+        private Transform m_followingCamera;
+
+        private void Awake()
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.Scale(forwardDirection, new Vector3(1, 0, 1)));
+            // Get the transform of the main camera
+            if (Camera.main != null)
+            {
+                m_followingCamera = Camera.main.transform;
+            }
+            else
+            {
+                Debug.LogWarning("Warning: no main camera found. Tank needs a Camera tagged \"MainCamera\", for camera-relative controls.");
+            }
+        }
+
+        private void Update()
+        {
+        }
+
+
+        private void FixedUpdate()
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, m_followingCamera.eulerAngles.y, transform.eulerAngles.z);
         }
     }
 }
