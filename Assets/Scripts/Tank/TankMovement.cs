@@ -91,20 +91,9 @@ namespace Diep3D.Tank
 
             // Rotate up/down
             float cameraUpAngle = (m_followingCamera.transform.eulerAngles.x + 90) % 360;
-            Debug.Log(cameraUpAngle);
-            // Angles between -6.5° and 52.5° are the only allowed angles
-            if (cameraUpAngle >= 37.5f || cameraUpAngle <= 96.5f) // -6.5° to 52.5°
-            {
-                m_GunTransform.eulerAngles = new Vector3(cameraUpAngle, m_GunTransform.eulerAngles.y, m_GunTransform.eulerAngles.z);
-            }
-            else if (cameraUpAngle > 96.5f) // -90° to -6.5°
-            {
-                m_GunTransform.eulerAngles = new Vector3(96.5f, m_GunTransform.eulerAngles.y, m_GunTransform.eulerAngles.z);
-            }
-            else if (cameraUpAngle < 37.5f) // 52.5° to 90°
-            {
-                m_GunTransform.eulerAngles = new Vector3(37.5f, m_GunTransform.eulerAngles.y, m_GunTransform.eulerAngles.z);
-            }
+            cameraUpAngle = Mathf.Max(37.5f, cameraUpAngle);
+            cameraUpAngle = Mathf.Min(96.5f, cameraUpAngle);
+            m_GunTransform.localRotation = Quaternion.Euler(cameraUpAngle, 0, 0);
         }
 
         /// <summary>
